@@ -1,0 +1,103 @@
+{
+  "name": "todo",
+  "version": "0.1.0",
+  "description": "Starter kit for React, Webpack (with Hot Module Replacement), Typescript and Babel.",
+  "keywords": [
+    "react",
+    "webpack",
+    "typescript",
+    "babel",
+    "sass",
+    "hmr",
+    "starter",
+    "boilerplate"
+  ],
+  "author": "Viktor Persson",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jangroeneveld/simple-todo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jangroeneveld/simple-todo/issues"
+  },
+  "homepage": "https://github.com/jangroeneveld/simple-todo",
+  "scripts": {
+    "build": "webpack -p --env=prod",
+    "lint": "npm run lint:ts && npm run lint:sass",
+    "lint:ts": "tslint './src/**/*.ts*' --format stylish --force",
+    "lint:sass": "stylelint ./src/**/*.scss",
+    "start": "npm run start-dev",
+    "start-dev": "webpack-dev-server --config=webpack.config.dev.js",
+    "start-prod": "npm run build && node express.js",
+    "test": "jest --watch --coverage"
+  },
+  "devDependencies": {
+    "@types/jest": "^20.0.8",
+    "@types/node": "^8.0.28",
+    "@types/react": "^16.0.5",
+    "@types/react-dom": "^15.5.4",
+    "awesome-typescript-loader": "^3.2.3",
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "express": "^4.15.4",
+    "file-loader": "^0.11.2",
+    "identity-obj-proxy": "^3.0.0",
+    "image-webpack-loader": "^3.4.2",
+    "jest": "^21.1.0",
+    "node-sass": "^4.5.3",
+    "postcss-loader": "^2.0.6",
+    "react": "^15.6.1",
+    "react-addons-test-utils": "^15.6.0",
+    "react-dom": "^15.6.1",
+    "react-hot-loader": "^3.0.0-beta.7",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "stylelint": "^8.1.1",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-webpack-plugin": "^0.9.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "webpack": "^3.6.0",
+    "webpack-dev-middleware": "^1.12.0",
+    "webpack-dev-server": "^2.8.2",
+    "webpack-merge": "^4.1.0"
+  },
+  "dependencies": {
+    "material-ui": "^1.0.0-beta.12",
+    "material-ui-icons": "^1.0.0-beta.10",
+    "react-router-dom": "^4.2.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/config/jest/jest.preprocessor.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "testRegex": "/__tests__/.*\\.(ts|tsx)$",
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|scss)$": "identity-obj-proxy",
+      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/jest/fileMock.js"
+    },
+    "globals": {
+      "DEVELOPMENT": false,
+      "FAKE_SERVER": false
+    }
+  }
+}
