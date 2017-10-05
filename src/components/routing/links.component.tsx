@@ -5,12 +5,15 @@ import { LinkModel } from "./link.model";
 import { HomeComponent } from "../home/home.component";
 import { links } from "./links";
 
-export class LinksComponent extends React.Component<{}, {}>{
+export class LinksComponent extends React.Component<{}, {}> {
 
 	render() {
 		return (
 			<List >
-				{links.map(link => {
+				{links.filter(link => {
+					console.log(link);
+					return link.listed === true;
+				}).map(link => {
 					return <Link to={"/" + link.address} style={{ textDecoration: "none" }} >
 						<ListItem>
 							<Typography type="button" color="accent">{link.address}</Typography>

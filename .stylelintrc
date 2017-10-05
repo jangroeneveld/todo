@@ -9,6 +9,6 @@
     }],
     "indentation": "tab",
     "number-leading-zero": null,
-    "unit-whitelist": ["px", "em", "rem", "s"]
+    "unit-whitelist": ["px", "em", "rem", "s", "deg", "%", "vw", "vh"]
   }
 }

@@ -5,13 +5,18 @@ import "./application.component.scss";
 import { RouterOutletComponent } from "../routing/router-outlet.component";
 import { LinksComponent } from "../routing/links.component";
 import Paper from "material-ui/Paper/Paper";
+import { SpeechInitialize } from "../../speech-control/speech-initialize";
 
 export class ApplicationComponent extends React.Component<{}, {}> {
 	state = { drawerOpen: false };
 
+	componentDidMount() {
+		let speechInitialize = new SpeechInitialize();
+	}
+
 	render() {
 		return <div>
-			<AppBar position="static">
+			<AppBar style={{marginTop: 0, padding: 0}} position="static">
 				<Toolbar>
 					<IconButton color="contrast" aria-label="Menu" onClick={() => { this.setState({ drawerOpen: !this.state.drawerOpen }); }}>
 						<Menu />
@@ -22,7 +27,7 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 					<Button color="contrast">Login</Button>
 				</Toolbar>
 			</AppBar>
-			<Drawer type="persistent" open={this.state.drawerOpen} onClick={() => { this.setState({ drawerOpen: !this.state.drawerOpen }); }}>
+			<Drawer type="persistent" style={{padding: 0, margin: 0 }} open={this.state.drawerOpen} onClick={() => { this.setState({ drawerOpen: !this.state.drawerOpen }); }}>
 				<Paper style={{ width: 300, height: "auto" }}>
 					<List >
 						<IconButton >
@@ -33,22 +38,7 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 					<LinksComponent />
 				</Paper>
 			</Drawer>
-			<MuiThemeProvider theme={this.getTheme}>
-				<RouterOutletComponent />
-			</MuiThemeProvider>
+			<RouterOutletComponent />
 		</div>;
-	}
-
-	getTheme = () => {
-		return createMuiTheme({
-			overrides: {
-				MuiPaper: {
-					root: {
-						marginTop: 16,
-						padding: 16
-					}
-				}
-			}
-		});
 	}
 }

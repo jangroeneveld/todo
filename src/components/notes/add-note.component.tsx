@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Paper, Typography, TextField, Button, Grid } from "material-ui";
 
-export class AddProjectComponent extends React.Component<{addProject: (newProjectName: string) => void}, {}> {
+export class AddNoteComponent extends React.Component<{addNote: (note: string) => void}, {}> {
 
-	state = {newProjectName: ""};
+	state = {noteDescription: ""};
 
 	render() {
 		return(
@@ -16,7 +16,7 @@ export class AddProjectComponent extends React.Component<{addProject: (newProjec
 						<TextField fullWidth label="Name" placeholder="New project" onChange={this.handleNameChange("newProjectName")}/>
 					</Grid>
 					<Grid item xs={12}>
-						<Button onClick={this.createProject}>Add project</Button>
+						<Button raised color="accent" onClick={this.createProject}>Add project</Button>
 					</Grid>
 				</Grid>
 			</Paper>
@@ -28,6 +28,6 @@ export class AddProjectComponent extends React.Component<{addProject: (newProjec
 	}
 
 	createProject = () => {
-		this.props.addProject(this.state.newProjectName);
+		this.props.addNote(this.state.noteDescription);
 	}
 }
