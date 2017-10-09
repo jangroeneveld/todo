@@ -72,6 +72,7 @@
   },
   "dependencies": {
     "annyang": "^2.6.0",
+    "firebase": "^4.5.0",
     "material-ui": "^1.0.0-beta.13",
     "material-ui-icons": "^1.0.0-beta.15",
     "react-router-dom": "^4.2.2"

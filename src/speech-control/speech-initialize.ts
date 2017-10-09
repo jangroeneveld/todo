@@ -8,9 +8,9 @@ export class SpeechInitialize {
 			"go to (the) project (page)": () => { location.href = location.origin + "/#/projects"; },
 			"go to (the) projects (page)": () => { location.href = location.origin + "/#/projects"; },
 			"(go) back": () => { history.back(); },
-			"*thing": (thing) => { console.log(thing) }
+			"what is :query": (query: string) => { window.open("https://www.google.com/search?q=" + query)}
 		};
 		annyang.addCommands(commands);
-		annyang.start();
+		annyang.start({ autoRestart: true, continuous: false });
 	}
 }

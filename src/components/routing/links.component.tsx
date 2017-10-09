@@ -11,7 +11,6 @@ export class LinksComponent extends React.Component<{}, {}> {
 		return (
 			<List >
 				{links.filter(link => {
-					console.log(link);
 					return link.listed === true;
 				}).map(link => {
 					return <Link to={"/" + link.address} style={{ textDecoration: "none" }} >
