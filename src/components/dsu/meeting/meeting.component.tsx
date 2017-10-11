@@ -11,7 +11,6 @@ export class MeetingComponent extends React.Component<{match: Match}, {}> {
 			let members = [];
 			firebase.firestore().collection("projects").doc(meeting.projectId).onSnapshot(result => {
 				let project = result.data();
-				console.log(project);
 				this.setState({
 					members: project.members,
 					isReady: true
@@ -72,7 +71,7 @@ export class MeetingComponent extends React.Component<{match: Match}, {}> {
 						</Paper>
 					</Grid>;
 				})}
-				<Button onClick={this.finishMeeting}>Finish meeting</Button>
+				{(this.state.meeting && !this.state.meeting.finished) && <Button onClick={this.finishMeeting}>Finish meeting</Button>}
 			</Grid>
 		);
 	}
@@ -83,12 +82,29 @@ export class MeetingComponent extends React.Component<{match: Match}, {}> {
 	}
 
 	finishMeeting = async () => {
+		this.state.members.forEach(member => {
+			let tasksArray = this.state.newTasks[member.toLowerCase()];
+			tasksArray.forEach(task => {
+				if (task.description.length === 0) {
+					tasksArray.splice(tasksArray.indexOf(task), 1);
+				}
+			});
+		});
+		this.state.members.forEach(member => {
+			let tasksArray = this.state.tasksYesterday[member.toLowerCase()];
+			tasksArray.forEach(task => {
+				if (!task.completed) {
+					this.state.newTasks[member.toLowerCase()].push(task);
+				}
+			});
+		});
 		await firebase.firestore().collection("meetings").doc(this.state.meeting.id).update({
 			tasksYesterday: this.state.tasksYesterday,
 			newTasks: this.state.newTasks,
-			comments: this.state.comments
+			comments: this.state.comments,
+			finished: true
 		});
-		location.href = location.origin + "/#/meetings/" + this.state.meeting.projectId;
+		location.href = location.origin + "/#/project/" + this.state.meeting.projectId;
 	}
 }
 

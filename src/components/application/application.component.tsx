@@ -36,7 +36,7 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 						<Menu />
 					</IconButton>
 					<Typography type="title" color="inherit" style={{ flex: 1 }}>
-						Duly
+						Daily Stand Up-Tool
 					</Typography>
 					{!this.state.currentUser && <Button color="contrast" onClick={this.signIn}>Login</Button>}
 					{this.state.currentUser && <Avatar src={this.state.currentUser.photoURL} onClick={this.signOut}/>}
@@ -53,13 +53,13 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 					<LinksComponent />
 				</Paper>
 			</Drawer>
-			<MuiThemeProvider theme={this.getTheme.bind(this)}>
+			<MuiThemeProvider theme={this.getTheme}>
 				<RouterOutletComponent />
 			</MuiThemeProvider>
 		</div>;
 	}
 
-	getTheme() {
+	getTheme = () => {
 		return createMuiTheme({
 			overrides: {
 				MuiPaper: {

@@ -58,7 +58,7 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 					</Grid>
 					{this.state.ownedProjects.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1).map(project => {
 						return <Grid key={project.id} item xs={12} sm={6}>
-							<Link to={"/meetings/" + project.id} style={{ textDecoration: "none" }}>
+							<Link to={"/project/" + project.id} style={{ textDecoration: "none" }}>
 								<Card style={{ height: 200 }} className="selectable-project">
 									<Typography type="button" color="accent" noWrap gutterBottom>{project.name}</Typography>
 								</Card>
