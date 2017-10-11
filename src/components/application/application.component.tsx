@@ -18,7 +18,7 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 	database = firebase.firestore();
 
 	async componentDidMount() {
-		new SpeechInitialize();
+		// new SpeechInitialize();
 		await firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
 				this.setState({currentUser: user});

@@ -4,7 +4,7 @@ import { Paper, Typography, Grid, Card } from "material-ui";
 import { Link } from "react-router-dom";
 import { ProjectModel } from "../project.model";
 
-export class ProjectComponent extends React.Component<{match: ProjectModel}, {}> {
+export class ProjectComponent extends React.Component<{match: any}, {}> {
 
 	state = {notes: [
 		{id: uuid(), name: "Note"},
@@ -14,7 +14,8 @@ export class ProjectComponent extends React.Component<{match: ProjectModel}, {}>
 	]};
 
 	componentDidMount() {
-		console.log(this.props);
+		console.log(this.props.match.params.project);
+		
 	}
 
 	render() {
@@ -22,7 +23,7 @@ export class ProjectComponent extends React.Component<{match: ProjectModel}, {}>
 			<div>
 				<Paper>
 					<Typography type="title" gutterBottom>
-						{this.props.match.name}
+						hi
 					</Typography>
 				</Paper>
 				<Grid container>

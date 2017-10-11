@@ -75,6 +75,7 @@
     "firebase": "^4.5.0",
     "material-ui": "^1.0.0-beta.13",
     "material-ui-icons": "^1.0.0-beta.15",
+    "moment": "^2.19.0",
     "react-router-dom": "^4.2.2"
   },
   "jest": {
