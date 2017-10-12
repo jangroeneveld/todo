@@ -27,9 +27,11 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 		firebase.auth().onAuthStateChanged(user => {
 			this.setState({ currentUser: user ? user : null });
 		});
+		console.log(moment["default"]("2017-10-10 10:10").format("YYYY-MM-DD HH:mm"));
 	}
 
 	member: string;
+	subscriber: string;
 
 	state = {
 		currentUser: null,
@@ -41,12 +43,12 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 	render() {
 		return (
 			<Grid container>
-				{(this.userIsOwner() && this.state.members.length > 1) && <Grid item xs={12}>
+				{(this.userIsOwner() && !!this.state.members.length) && <Grid item xs={12}>
 					<Paper className="selectable-meeting">
 						<Button onClick={this.startNewMeeting} raised>Start meeting</Button>
 					</Paper>
 				</Grid>}
-				{this.state.meetings.map(meeting => {
+				{this.state.meetings.sort((m1, m2) => { return moment["default"].utc(m2.date) - moment["default"].utc(m1.date); }).map(meeting => {
 					return <Grid xs={12} md={6} item>
 						<Link to={"/meeting/" + meeting.id}>
 							<Paper className="selectable-meeting">
@@ -65,7 +67,7 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 						</List>
 					</Paper>
 				</Grid>
-				{this.userIsOwner() && ["member"].map(role => <Grid item xs={12} md={6}>
+				{this.userIsOwner() && ["member", "subscriber"].map(role => <Grid item xs={12} md={6}>
 					<Paper>
 						<Grid container spacing={8}>
 							<Grid item xs={6}>
@@ -92,6 +94,11 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 		switch (name) {
 			case "member":
 				firebase.firestore().collection("projects").doc(this.state.project.id).update({members: [this.member].concat(this.state.members)});
+				this.member = "";
+				break;
+			case "subscriber":
+				firebase.firestore().collection("projects").doc(this.state.project.id).update({subscriberUids: {[this.subscriber]: true}});
+				this.subscriber = "";
 				break;
 		}
 	}
@@ -104,7 +111,7 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 	startNewMeeting = async () => {
 		if (!firebase.auth().currentUser) return;
 		let meeting = {
-			date: moment["default"]().format("YYYY-MM-DD HH:mm"),
+			date: moment["default"]().format("YYYY-MM-DD HH:mm:ss"),
 			id: uuid(),
 			projectId: this.state.project.id
 		};

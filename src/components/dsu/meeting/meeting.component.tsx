@@ -22,10 +22,6 @@ export class MeetingComponent extends React.Component<{match: Match}, {}> {
 		});
 	}
 
-	componentDidUpdate() {
-		console.log(this.state);
-	}
-
 	state = {
 		currentUser: null,
 		meeting: null,

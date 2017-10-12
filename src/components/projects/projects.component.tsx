@@ -132,10 +132,13 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 			querySnapshot.forEach(doc => {
 				ownedProjects.push(doc.data());
 			});
+			console.log(ownedProjects);
 			this.setState({ownedProjects, recievedOwnedProjects: true});
 		});
+		console.log(firebase.auth().currentUser);
 		firebase.firestore().collection("projects").where("subscriberUids." + firebase.auth().currentUser.uid, "==", true).onSnapshot(querySnapshot => {
 			let subscribedProjects = [];
+			console.log(querySnapshot);
 			querySnapshot.forEach(doc => {
 				subscribedProjects.push(doc.data());
 			});
