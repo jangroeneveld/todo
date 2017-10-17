@@ -5,22 +5,17 @@ Minimal starter kit with hot module replacement (HMR) for rapid development.
 * **[Webpack](https://webpack.js.org/)** (3.x)
 * **[Typescript](https://www.typescriptlang.org/)** (2.x)
 * **[Hot Module Replacement (HMR)](https://webpack.js.org/concepts/hot-module-replacement/)** using [React Hot Loader](https://github.com/gaearon/react-hot-loader) (3.x)
-* [Babel](http://babeljs.io/) (6.x)
 * [SASS](http://sass-lang.com/)
-* [Jest](https://facebook.github.io/jest/) - Testing framework for React applications
-* Production build script
-* Image loading/minification using [Image Webpack Loader](https://github.com/tcoopman/image-webpack-loader)
-* Typescript compiling using [Awesome Typescript Loader](https://github.com/s-panferov/awesome-typescript-loader) (3.x)
-* Code quality (linting) for Typescript and SASS/CSS.
   
 ## Installation
 1. Clone/download repo
 2. `npm install`
+3. Paste your firebase credentials in `src/resources/firebase.config.json`
 
 ## Usage
 **Development**
 
-`npm run start-dev`
+`npm start`
 
 * Build app continously (HMR enabled)
 * App served @ `http://localhost:8080` 
@@ -31,6 +26,16 @@ Minimal starter kit with hot module replacement (HMR) for rapid development.
 
 * Build app once (HMR disabled)
 * App served @ `http://localhost:3000`
+
+**Setting up depolyment**
+
+`firebase init`
+select `firestore` and `hosting`
+
+**Deployment**
+
+`npm run build`
+`firebase deploy`
 
 ---
 

@@ -1,8 +1,3 @@
 {
-    "apiKey": "AIzaSyDzIK47WrkS25Y9UK_14eCBfO1EZ2Wp9Hc",
-    "authDomain": "dsu-tool.firebaseapp.com",
-    "databaseURL": "https://dsu-tool.firebaseio.com",
-    "projectId": "dsu-tool",
-    "storageBucket": "dsu-tool.appspot.com",
-    "messagingSenderId": "1026511327265"
+    /* your firebase credentials here */
 }
