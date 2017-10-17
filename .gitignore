@@ -4,5 +4,6 @@ dist/*
 .idea/
 coverage/
 src/**/*.jsx
+src/resources/firebase.config.json
 __tests__/**/*.jsx
 npm-debug.log
