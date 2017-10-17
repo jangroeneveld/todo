@@ -13,10 +13,10 @@ export class AddProjectComponent extends React.Component<{addProject: (newProjec
 				</Typography>
 				<Grid container>
 					<Grid item xs={12}>
-						<TextField fullWidth label="Name" placeholder="New project" onChange={this.handleNameChange("newProjectName")}/>
+						<TextField fullWidth label="New project name" placeholder="New project" onChange={this.handleNameChange("newProjectName")}/>
 					</Grid>
 					<Grid item xs={12}>
-						<Button onClick={this.createProject}>Add project</Button>
+						<Button raised onClick={this.createProject}>Add project</Button>
 					</Grid>
 				</Grid>
 			</Paper>

@@ -7,6 +7,7 @@ import { Grid, Typography, Paper, TextField, Button, List, ListItem } from "mate
 import { Link, Match } from "react-router-dom";
 
 import "./project.component.scss";
+import { InvitationController } from "../../invitation/invitation.controller";
 
 export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 
@@ -27,9 +28,8 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 		firebase.auth().onAuthStateChanged(user => {
 			this.setState({ currentUser: user ? user : null });
 		});
-		console.log(moment["default"]("2017-10-10 10:10").format("YYYY-MM-DD HH:mm"));
 	}
-
+	invitationController: InvitationController = new InvitationController();
 	member: string;
 	subscriber: string;
 
@@ -77,7 +77,7 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 								<Button raised onClick={this.postNewUser(role)} style={{float: "right"}}>Add {role}</Button>
 							</Grid>
 							<Grid item xs={12}>
-								<TextField onChange={this.handleChange(role)} fullWidth />
+								<TextField value={this[role]} onChange={this.handleChange(role)} fullWidth />
 							</Grid>
 						</Grid>
 					</Paper>
@@ -90,15 +90,17 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 		this[name] = event.target.value;
 	}
 
-	postNewUser = name => () => {
+	postNewUser = name => async () => {
 		switch (name) {
 			case "member":
 				firebase.firestore().collection("projects").doc(this.state.project.id).update({members: [this.member].concat(this.state.members)});
 				this.member = "";
+				this.forceUpdate();
 				break;
 			case "subscriber":
-				firebase.firestore().collection("projects").doc(this.state.project.id).update({subscriberUids: {[this.subscriber]: true}});
+				await this.invitationController.sendInvitation(this.state.project.id, this.subscriber, this.state.project.name);
 				this.subscriber = "";
+				this.forceUpdate();
 				break;
 		}
 	}

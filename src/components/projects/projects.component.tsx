@@ -9,6 +9,7 @@ import { Launch } from "material-ui-icons";
 import { Link } from "react-router-dom";
 import "./projects.component.scss";
 import { ProjectModel } from "./project.model";
+import { InvitationController } from "../invitation/invitation.controller";
 
 export class ProjectsComponent extends React.Component<{}, {}> {
 
@@ -40,9 +41,12 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 	state = {
 		ownedProjects: [],
 		subscribedProjects: [],
+		invitations: [],
 		recievedOwnedProjects: true,
-		recievedSubscribedProjects: true
+		recievedSubscribedProjects: true,
+		recievedInvitations: true
 	};
+	invitationController: InvitationController = new InvitationController();
 
 	render() {
 		return (
@@ -87,6 +91,25 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 							</Link>
 						</Grid>;
 					})}
+
+					<Grid item xs={12}>
+						<Paper>
+							<Typography type="title" gutterBottom>
+								Invitations
+							</Typography>
+							{!this.state.recievedInvitations && <LinearProgress mode="query" />}
+						</Paper>
+					</Grid>
+
+					{this.state.invitations.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1).map(invitation => {
+						return <Grid key={invitation.id} item xs={12} sm={6}>
+							<Card style={{ height: 200 }}>
+								<Typography type="button" color="accent" noWrap gutterBottom>{invitation.projectName}</Typography>
+								<Button onClick={() => {this.invitationController.acceptInivitation(invitation); }}> Accept </Button>
+								<Button onClick={() => {this.invitationController.withdrawInvitation(invitation); }}> Decline </Button>
+							</Card>
+						</Grid>;
+					})}
 				</Grid>
 			</div>
 		);
@@ -124,25 +147,23 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 		});
 	}
 
-	getProjects = () => {
+	getProjects = async () => {
 		if (!firebase.auth().currentUser) return;
-		this.setState({recievedOwnedProjects: false, recievedSubscribedProjects: false});
+		this.setState({recievedOwnedProjects: false, recievedSubscribedProjects: false, recievedInvitations: false});
 		firebase.firestore().collection("projects").where("ownerUid", "==", firebase.auth().currentUser.uid).onSnapshot(querySnapshot => {
 			let ownedProjects = [];
 			querySnapshot.forEach(doc => {
 				ownedProjects.push(doc.data());
 			});
-			console.log(ownedProjects);
 			this.setState({ownedProjects, recievedOwnedProjects: true});
 		});
-		console.log(firebase.auth().currentUser);
 		firebase.firestore().collection("projects").where("subscriberUids." + firebase.auth().currentUser.uid, "==", true).onSnapshot(querySnapshot => {
 			let subscribedProjects = [];
-			console.log(querySnapshot);
 			querySnapshot.forEach(doc => {
 				subscribedProjects.push(doc.data());
 			});
 			this.setState({subscribedProjects, recievedSubscribedProjects: true});
 		});
+		this.setState({invitations: await this.invitationController.getInvitationsForEmail(firebase.auth().currentUser.email), recievedInvitations: true});
 	}
 }
