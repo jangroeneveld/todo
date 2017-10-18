@@ -3,4 +3,5 @@ export class ProjectModel {
 	id: string;
 	ownerUid: string;
 	subscriberUids: string[] = [];
+	members: string[] = [];
 }

@@ -8,6 +8,7 @@ import { RouterOutletComponent } from "../routing/router-outlet.component";
 import { LinksComponent } from "../routing/links.component";
 import Paper from "material-ui/Paper/Paper";
 import { SpeechInitialize } from "../../speech-control/speech-initialize";
+import { UserController } from "../../controllers/user/user.controller";
 
 export class ApplicationComponent extends React.Component<{}, {}> {
 	state = {
@@ -16,6 +17,7 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 	};
 	provider = new firebase.auth.GoogleAuthProvider();
 	database = firebase.firestore();
+	userController: UserController = new UserController();
 
 	async componentDidMount() {
 		// new SpeechInitialize();
@@ -87,16 +89,7 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 	signIn = () => {
 		firebase.auth().signInWithPopup(this.provider).then(result => {
 			if (result.user) {
-				this.database.collection("users").doc(result.user.uid).get().then((document) => {
-					if (!document.exists) {
-						this.database.collection("users").doc(result.user.uid).set({
-							uid: result.user.uid,
-							photoURL: result.user.photoURL,
-							ownedProjects: [],
-							subscribedProjecs: []
-						});
-					}
-				});
+				this.userController.createUser(result.user);
 			}
 		});
 	}

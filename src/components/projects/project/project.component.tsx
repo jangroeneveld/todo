@@ -5,30 +5,31 @@ import * as uuid from "uuid";
 import "firebase/firestore";
 import { Grid, Typography, Paper, TextField, Button, List, ListItem } from "material-ui";
 import { Link, Match } from "react-router-dom";
+import { InvitationController } from "../../../controllers/invitation/invitation.controller";
 
 import "./project.component.scss";
-import { InvitationController } from "../../invitation/invitation.controller";
+import { ProjectController } from "../../../controllers/project/project.controller";
 
 export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 
-	componentDidMount() {
-		firebase.firestore().collection("projects").doc(this.props.match.params.project).onSnapshot(result => {
-			let project = result.data();
-			console.log(project);
-			this.setState({
-				project: project,
-				members: project.members || [],
-			});
-			firebase.firestore().collection("meetings").where("projectId", "==", project.id).onSnapshot(result => {
-				let meetings = [];
-				result.forEach(meeting => meetings.push(meeting.data()));
-				this.setState({meetings});
-			});
+	async componentDidMount() {
+		let project = await this.projectController.getProject(this.props.match.params.project);
+		if (!project) return;
+		this.setState({
+			project: project,
+			members: project.members || [],
+		});
+		firebase.firestore().collection("meetings").where("projectId", "==", project.id).onSnapshot(result => {
+			let meetings = [];
+			result.forEach(meeting => meetings.push(meeting.data()));
+			this.setState({meetings});
 		});
 		firebase.auth().onAuthStateChanged(user => {
 			this.setState({ currentUser: user ? user : null });
 		});
 	}
+
+	projectController: ProjectController = new ProjectController();
 	invitationController: InvitationController = new InvitationController();
 	member: string;
 	subscriber: string;
@@ -93,7 +94,7 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 	postNewUser = name => async () => {
 		switch (name) {
 			case "member":
-				firebase.firestore().collection("projects").doc(this.state.project.id).update({members: [this.member].concat(this.state.members)});
+				await this.projectController.addMemberToProject(this.state.project, this.member);
 				this.member = "";
 				this.forceUpdate();
 				break;
@@ -135,8 +136,8 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 							projectId: this.state.project.id,
 							tasksYesterday: tasksYesterday,
 							newTasks: newTasks
-						}).then(() => {
-							firebase.firestore().collection("projects").doc(this.state.project.id).update({lastMeetingId: meeting.id});
+						}).then(async () => {
+							await this.projectController.updateLastMeetingId(this.state.project.id, meeting.id);
 							location.href = location.origin + "/#/meeting/" + meeting.id;
 						});
 						return;
@@ -148,8 +149,8 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 					projectId: this.state.project.id,
 					tasksYesterday: tasksYesterday,
 					newTasks: newTasks
-				}).then(() => {
-					firebase.firestore().collection("projects").doc(this.state.project.id).update({lastMeetingId: meeting.id});
+				}).then(async () => {
+					await this.projectController.updateLastMeetingId(this.state.project.id, meeting.id);
 					location.href = location.origin + "/#/meeting/" + meeting.id;
 				});
 			}

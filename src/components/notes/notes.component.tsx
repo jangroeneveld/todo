@@ -1,10 +1,9 @@
 import * as React from "react";
 import * as uuid from "uuid";
 import { Paper, Typography, Grid, Card } from "material-ui";
-import { Link } from "react-router-dom";
-import { ProjectModel } from "../projects/project.model";
+import { Link, Match } from "react-router-dom";
 
-export class NotesComponent extends React.Component<{ match: ProjectModel }, {}> {
+export class NotesComponent extends React.Component<{ match: Match }, {}> {
 
 	state = {
 		notes: [

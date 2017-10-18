@@ -10,7 +10,7 @@ Minimal starter kit with hot module replacement (HMR) for rapid development.
 ## Installation
 1. Clone/download repo
 2. `npm install`
-3. Paste your firebase credentials in `src/resources/firebase.config.json`
+3. Create a file with your firebase credentials at `src/resources/firebase.config.json`
 
 ## Usage
 **Development**

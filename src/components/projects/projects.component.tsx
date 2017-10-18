@@ -8,8 +8,10 @@ import { AddProjectComponent } from "./add-project.component";
 import { Launch } from "material-ui-icons";
 import { Link } from "react-router-dom";
 import "./projects.component.scss";
-import { ProjectModel } from "./project.model";
-import { InvitationController } from "../invitation/invitation.controller";
+import { InvitationController } from "../../controllers/invitation/invitation.controller";
+import { ProjectModel } from "../../controllers/project/project.model";
+import { ProjectController } from "../../controllers/project/project.controller";
+import { UserController } from "../../controllers/user/user.controller";
 
 export class ProjectsComponent extends React.Component<{}, {}> {
 
@@ -46,7 +48,10 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 		recievedSubscribedProjects: true,
 		recievedInvitations: true
 	};
+
 	invitationController: InvitationController = new InvitationController();
+	projectController: ProjectController = new ProjectController();
+	userController: UserController = new UserController();
 
 	render() {
 		return (
@@ -121,30 +126,13 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 		project.name = newProjectName;
 		project.id = uuid();
 		project.ownerUid = firebase.auth().currentUser.uid;
-		await firebase.firestore().collection("projects").doc(project.id).get().then(result => {
-			if (result.exists) {
-				this.addProject(newProjectName);
-				return;
-			} else {
-				firebase.firestore().collection("projects").doc(project.id).set({
-					name: project.name,
-					ownerUid: project.ownerUid,
-					subscriberUids: project.subscriberUids,
-					id: project.id,
-					members: [],
-					meetings: []
-				}).then(() => {
-					firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).get().then(user => {
-						let ownedProjects = user.data().ownedProjects;
-						ownedProjects.push(project.id);
-						firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update({ownedProjects: ownedProjects});
-					});
-					let ownedProjects = this.state.ownedProjects;
-					ownedProjects.push(project);
-					this.setState(ownedProjects);
-				});
-			}
-		});
+		let createdProject = await this.projectController.createProject(newProjectName);
+		if (!createdProject) return;
+		await this.userController.addOwnedProject(firebase.auth().currentUser.uid, createdProject);
+
+		let ownedProjects = this.state.ownedProjects;
+		ownedProjects.push(createdProject);
+		this.setState(ownedProjects);
 	}
 
 	getProjects = async () => {

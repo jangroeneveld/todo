@@ -2,25 +2,29 @@ import * as React from "react";
 import * as firebase from "firebase";
 import { Grid, Typography, Paper, List, ListItem, Checkbox, TextField, Button } from "material-ui";
 import { Match } from "react-router-dom";
+import { ProjectController } from "../../../controllers/project/project.controller";
 
 export class MeetingComponent extends React.Component<{match: Match}, {}> {
-	componentDidMount() {
-		firebase.firestore().collection("meetings").doc(this.props.match.params.meeting).onSnapshot(result => {
-			let meeting = result.data();
+
+	async componentDidMount() {
+		let meeting;
+		await firebase.firestore().collection("meetings").doc(this.props.match.params.meeting).onSnapshot(result => {
+			meeting = result.data();
 			this.setState({meeting, tasksYesterday: meeting.tasksYesterday, newTasks: meeting.newTasks});
 			let members = [];
-			firebase.firestore().collection("projects").doc(meeting.projectId).onSnapshot(result => {
-				let project = result.data();
-				this.setState({
-					members: project.members,
-					isReady: true
-				});
-			});
+		});
+		let project = await this.projectController.getProject(meeting.projectId);
+		if (!project) return;
+		this.setState({
+			members: project.members,
+			isReady: true
 		});
 		firebase.auth().onAuthStateChanged(user => {
 			this.setState({ currentUser: user ? user : null });
 		});
 	}
+
+	projectController: ProjectController = new ProjectController();
 
 	state = {
 		currentUser: null,
