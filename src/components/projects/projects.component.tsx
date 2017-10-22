@@ -121,11 +121,6 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 	}
 
 	addProject = async (newProjectName: string) => {
-		if (!firebase.auth().currentUser) return;
-		let project: ProjectModel = new ProjectModel();
-		project.name = newProjectName;
-		project.id = uuid();
-		project.ownerUid = firebase.auth().currentUser.uid;
 		let createdProject = await this.projectController.createProject(newProjectName);
 		if (!createdProject) return;
 		await this.userController.addOwnedProject(firebase.auth().currentUser.uid, createdProject);

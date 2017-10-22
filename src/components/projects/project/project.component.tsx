@@ -9,20 +9,22 @@ import { InvitationController } from "../../../controllers/invitation/invitation
 
 import "./project.component.scss";
 import { ProjectController } from "../../../controllers/project/project.controller";
+import { ProjectModel } from "../../../controllers/project/project.model";
 
 export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 
 	async componentDidMount() {
-		let project = await this.projectController.getProject(this.props.match.params.project);
-		if (!project) return;
-		this.setState({
-			project: project,
-			members: project.members || [],
-		});
-		firebase.firestore().collection("meetings").where("projectId", "==", project.id).onSnapshot(result => {
-			let meetings = [];
-			result.forEach(meeting => meetings.push(meeting.data()));
-			this.setState({meetings});
+		this.projectController.getProjectContinuous(this.props.match.params.project, (project: ProjectModel) => {
+			if (!project) return;
+			this.setState({
+				project: project,
+				members: project.members || [],
+			});
+			firebase.firestore().collection("meetings").where("projectId", "==", project.id).onSnapshot(result => {
+				let meetings = [];
+				result.forEach(meeting => meetings.push(meeting.data()));
+				this.setState({meetings});
+			});
 		});
 		firebase.auth().onAuthStateChanged(user => {
 			this.setState({ currentUser: user ? user : null });

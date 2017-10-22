@@ -8,7 +8,7 @@ export class RouterOutletComponent extends React.Component<{}, {}> {
 	render() {
 		return (
 			<Grid container style={{width: "100%", margin: 0}} justify="space-around">
-				<Grid style={{maxWidth: "100%"}} item xs={12}>
+				<Grid style={{maxWidth: "100%"}} item xs={12} md={8} lg={6}>
 					{links.map(link => {
 						return <Route path={"/" + link.address} exact={link.exact} component={link.component} />;
 					})}

@@ -33,7 +33,6 @@ export class InvitationController {
 				invitations.push(invite as InvitationModel);
 			});
 		});
-		console.log(invitations);
 		return invitations;
 	}
 }

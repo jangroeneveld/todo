@@ -5,6 +5,7 @@ Minimal starter kit with hot module replacement (HMR) for rapid development.
 * **[Webpack](https://webpack.js.org/)** (3.x)
 * **[Typescript](https://www.typescriptlang.org/)** (2.x)
 * **[Hot Module Replacement (HMR)](https://webpack.js.org/concepts/hot-module-replacement/)** using [React Hot Loader](https://github.com/gaearon/react-hot-loader) (3.x)
+* **[React Material UI](https://material-ui-1dab0.firebaseapp.com/)** (1.x)
 * [SASS](http://sass-lang.com/)
   
 ## Installation
@@ -36,18 +37,3 @@ select `firestore` and `hosting`
 
 `npm run build`
 `firebase deploy`
-
----
-
-**All commands**
-
-Command | Description
---- | ---
-`npm run start-dev` | Build app continously (HMR enabled) and serve @ `http://localhost:8080`
-`npm run start-prod` | Build app once (HMR disabled) and serve @ `http://localhost:3000`
-`npm run build` | Build app to `/dist/bundle.min.js` 
-`npm run test` | Run tests
-`npm run lint` | Run Typescript and SASS linter
-`npm run lint:ts` | Run Typescript linter
-`npm run lint:sass` | Run SASS linter
-`npm run start` | (alias of `npm run start-dev`)

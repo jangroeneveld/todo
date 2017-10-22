@@ -62,28 +62,16 @@ export class ApplicationComponent extends React.Component<{}, {}> {
 	}
 
 	getTheme = () => {
-		let x = createMuiTheme({
+		return createMuiTheme({
 			overrides: {
 				MuiPaper: {
 					root: {
 						padding: 16,
 						backgroundColor: "rgba(255, 255, 255, 0.4)"
 					}
-				},
-				MuiButton: {
-					root: {
-						backgroundColor: "linear-gradient(-45deg, #3a6186 30%, #89253e 90%);",
-						borderRadius: 3,
-						border: 0,
-						height: 48,
-						padding: "0 30px",
-						boxShadow: "0 3px 5px 2px rgba(255, 105, 135, 0.3)",
-					}
 				}
 			}
 		});
-		console.log(x);
-		return x;
 	}
 
 	signIn = () => {

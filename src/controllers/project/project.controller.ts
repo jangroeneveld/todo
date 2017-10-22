@@ -5,6 +5,7 @@ import { ProjectModel } from "./project.model";
 export class ProjectController {
 
 	async createProject (projectName: string) {
+		if (projectName.length < 3) return false;
 		if (!firebase.auth().currentUser) return false;
 		let uid = firebase.auth().currentUser.uid;
 		let uniqueId = uuid();
@@ -30,11 +31,18 @@ export class ProjectController {
 
 	async getProject (projectId: string) {
 		if (!firebase.auth().currentUser) return false;
-		let project = await firebase.firestore().collection("projects").doc(projectId).get().then(snapshot => {
+		let project = firebase.firestore().collection("projects").doc(projectId).get().then(snapshot => {
 			if (!snapshot.exists) return false;
 			return snapshot.data() as ProjectModel;
 		});
 		return project;
+	}
+
+	async getProjectContinuous (projectId: string, callback: (ProjectModel) => void) {
+		let project = firebase.firestore().collection("projects").doc(projectId).onSnapshot(snapshot => {
+			if (!firebase.auth().currentUser || !snapshot.exists ) return null;
+			callback(snapshot.data() as ProjectModel);
+		});
 	}
 
 	async updateLastMeetingId (projectId: string, meetingId: string) {

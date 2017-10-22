@@ -8,7 +8,7 @@ export class MeetingComponent extends React.Component<{match: Match}, {}> {
 
 	async componentDidMount() {
 		let meeting;
-		await firebase.firestore().collection("meetings").doc(this.props.match.params.meeting).onSnapshot(result => {
+		await firebase.firestore().collection("meetings").doc(this.props.match.params.meeting).get().then(result => {
 			meeting = result.data();
 			this.setState({meeting, tasksYesterday: meeting.tasksYesterday, newTasks: meeting.newTasks});
 			let members = [];
@@ -50,7 +50,7 @@ export class MeetingComponent extends React.Component<{match: Match}, {}> {
 								Yesterday
 							</Typography>
 							<List>
-								{this.state.tasksYesterday[member.toLowerCase()].map(task => {
+								{this.state.tasksYesterday[member.toLowerCase()] && this.state.tasksYesterday[member.toLowerCase()].map(task => {
 									return <ListItem>
 										<Checkbox checked={task.completed} onChange={() => {task.completed = !task.completed; this.forceUpdate(); }}/>
 										<Typography onClick={() => {task.completed = !task.completed; this.forceUpdate(); }}>{task.description}</Typography>
@@ -60,7 +60,7 @@ export class MeetingComponent extends React.Component<{match: Match}, {}> {
 							<Typography type="title" gutterBottom>
 								today
 							</Typography>
-								{this.state.newTasks[member.toLowerCase()].map(task => {
+								{this.state.newTasks[member.toLowerCase()] && this.state.newTasks[member.toLowerCase()].map(task => {
 									return <TextField multiline value={task.description} onChange={this.updateTask(task)} fullWidth style={{marginBottom: 16}}/>;
 								})}
 								<Button raised color="accent" onClick={() => { this.state.newTasks[member.toLowerCase()].push({description: "", completed: false}); this.forceUpdate(); }}>+ </Button>
