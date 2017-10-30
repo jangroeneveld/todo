@@ -1,4 +1,4 @@
-#DSU-Tool
+# DSU-Tool
 
 * **[React](https://facebook.github.io/react/)** (15.x)
 * **[Webpack](https://webpack.js.org/)** (3.x)
