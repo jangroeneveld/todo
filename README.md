@@ -1,5 +1,4 @@
-# React Webpack Typescript Starter
-Minimal starter kit with hot module replacement (HMR) for rapid development.
+#DSU-Tool
 
 * **[React](https://facebook.github.io/react/)** (15.x)
 * **[Webpack](https://webpack.js.org/)** (3.x)
@@ -37,3 +36,5 @@ select `firestore` and `hosting`
 
 `npm run build`
 `firebase deploy`
+
+#### Based on React Webpack Typescript Starter
