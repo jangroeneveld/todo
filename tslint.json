@@ -53,6 +53,7 @@
             true,
             "tabs"
         ],
+        "max-line-length": [true, 140],
         "no-eval": true,
         "no-internal-module": true,
         "no-trailing-whitespace": true,

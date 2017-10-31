@@ -1,5 +1,5 @@
+import { Button, Grid, Paper, TextField, Typography } from "material-ui";
 import * as React from "react";
-import { Paper, Typography, TextField, Button, Grid } from "material-ui";
 
 export class AddProjectComponent extends React.Component<{ addProject: (newProjectName: string) => void }, {}> {
 

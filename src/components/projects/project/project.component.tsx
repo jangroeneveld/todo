@@ -47,7 +47,7 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 		return (
 			<Grid container>
 				{(this.userIsOwner() && !!this.state.members.length) && <Grid item xs={12}>
-					<Paper className="selectable-meeting">
+					<Paper>
 						<Button onClick={this.startNewMeeting} raised>Start meeting</Button>
 					</Paper>
 				</Grid>}
@@ -91,17 +91,18 @@ export class ProjectComponent extends React.Component<{ match: Match }, {}> {
 
 	handleChange = name => (event: any) => {
 		this[name] = event.target.value;
+		this.forceUpdate();
 	}
 
-	postNewUser = name => async () => {
+	postNewUser = name => () => {
 		switch (name) {
 			case "member":
-				await this.projectController.addMemberToProject(this.state.project, this.member);
+				this.projectController.addMemberToProject(this.state.project, this.member);
 				this.member = "";
 				this.forceUpdate();
 				break;
 			case "subscriber":
-				await this.invitationController.sendInvitation(this.state.project.id, this.subscriber, this.state.project.name);
+				this.invitationController.sendInvitation(this.state.project.id, this.subscriber, this.state.project.name);
 				this.subscriber = "";
 				this.forceUpdate();
 				break;

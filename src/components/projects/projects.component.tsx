@@ -1,33 +1,20 @@
-import * as React from "react";
-import * as uuid from "uuid";
-import * as annyang from "annyang";
-import * as firebase from "firebase";
-import "firebase/firestore";
-import { Typography, Paper, Button, Grid, Card, LinearProgress } from "material-ui";
-import { AddProjectComponent } from "./add-project.component";
-import { Launch } from "material-ui-icons";
-import { Link } from "react-router-dom";
 import "./projects.component.scss";
+import "firebase/firestore";
+
+import * as firebase from "firebase";
+import { Button, Card, Grid, LinearProgress, Paper, Typography } from "material-ui";
+import * as React from "react";
+import { Link } from "react-router-dom";
+
 import { InvitationController } from "../../controllers/invitation/invitation.controller";
-import { ProjectModel } from "../../controllers/project/project.model";
 import { ProjectController } from "../../controllers/project/project.controller";
+import { ProjectModel } from "../../controllers/project/project.model";
 import { UserController } from "../../controllers/user/user.controller";
+import { AddProjectComponent } from "./add-project.component";
 
 export class ProjectsComponent extends React.Component<{}, {}> {
 
 	async componentDidMount() {
-		// let commands = {
-		// 	"select project :val": (val: string) => {
-		// 		console.log(val);
-		// 		let project = [].concat(this.state.ownedProjects, this.state.subscribedProjects).find(p => p.name.toLowerCase() === val.toLowerCase());
-		// 		if (project) { location.href = location.origin + "/#/meetings/" + project.id; }
-		// 	},
-		// 	"new project :name": (name: string) => {
-		// 		this.addProject(name);
-		// 		this.forceUpdate();
-		// 	}
-		// };
-		// annyang.addCommands(commands);
 		await firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
 				this.getProjects();
@@ -110,8 +97,8 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 						return <Grid key={invitation.id} item xs={12} sm={6}>
 							<Card style={{ height: 200 }}>
 								<Typography type="button" color="accent" noWrap gutterBottom>{invitation.projectName}</Typography>
-								<Button onClick={() => {this.invitationController.acceptInivitation(invitation); }}> Accept </Button>
-								<Button onClick={() => {this.invitationController.withdrawInvitation(invitation); }}> Decline </Button>
+								<Button onClick={() => { this.invitationController.acceptInivitation(invitation); }}> Accept </Button>
+								<Button onClick={() => { this.invitationController.withdrawInvitation(invitation); }}> Decline </Button>
 							</Card>
 						</Grid>;
 					})}
@@ -132,21 +119,20 @@ export class ProjectsComponent extends React.Component<{}, {}> {
 
 	getProjects = async () => {
 		if (!firebase.auth().currentUser) return;
-		this.setState({recievedOwnedProjects: false, recievedSubscribedProjects: false, recievedInvitations: false});
-		firebase.firestore().collection("projects").where("ownerUid", "==", firebase.auth().currentUser.uid).onSnapshot(querySnapshot => {
-			let ownedProjects = [];
-			querySnapshot.forEach(doc => {
-				ownedProjects.push(doc.data());
-			});
-			this.setState({ownedProjects, recievedOwnedProjects: true});
+		this.setState({ recievedOwnedProjects: false, recievedSubscribedProjects: false, recievedInvitations: false });
+		this.projectController.getOwnedProjectsContinuous(firebase.auth().currentUser.uid, this.updateOwnedProjecs);
+		this.projectController.getSubscribedProjectsContinuous(firebase.auth().currentUser.uid, this.updateSubscribedProjects);
+		this.setState({
+			invitations: await this.invitationController.getInvitationsForEmail(firebase.auth().currentUser.email),
+			recievedInvitations: true
 		});
-		firebase.firestore().collection("projects").where("subscriberUids." + firebase.auth().currentUser.uid, "==", true).onSnapshot(querySnapshot => {
-			let subscribedProjects = [];
-			querySnapshot.forEach(doc => {
-				subscribedProjects.push(doc.data());
-			});
-			this.setState({subscribedProjects, recievedSubscribedProjects: true});
-		});
-		this.setState({invitations: await this.invitationController.getInvitationsForEmail(firebase.auth().currentUser.email), recievedInvitations: true});
+	}
+
+	updateOwnedProjecs = async (projects: ProjectModel[]) => {
+		this.setState({ ownedProjects: projects, recievedOwnedProjects: true });
+	}
+
+	updateSubscribedProjects = async (projects: ProjectModel[]) => {
+		this.setState({ subscribedProjects: projects, recievedSubscribedProjects: true });
 	}
 }
